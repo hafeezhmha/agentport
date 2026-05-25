@@ -1,0 +1,12 @@
+name: file-writer
+description: "Write generated GitAgent identity files to the target output directory."
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    output:
+      type: string
+  required: [output]
+annotations:
+  read_only: false
+  requires_confirmation: true

@@ -1,0 +1,22 @@
+name: port-framework-agent
+description: Port a framework-agent identity layer into a GitAgent/Open GAP repo.
+steps:
+  - agent: framework-detector
+    prompt: Detect source framework from file tree, dependency files, and static source markers.
+  - agent: framework-docs-advisor
+    prompt: Confirm detected framework/profile syntax against preloaded docs links and flag when live documentation search is required.
+  - agent: identity-extractor
+    prompt: Extract portable prompts, roles, goals, backstories, instructions, constraints, and model preferences.
+  - agent: tool-schema-extractor
+    prompt: Extract portable tool metadata and flag implementation code for manual review.
+  - agent: sod-mapper
+    prompt: Map source multi-agent hierarchy into DUTIES.md and separation-of-duties constraints.
+  - agent: schema-writer
+    prompt: Generate GitAgent identity files, conversion map, and manual review TODOs.
+  - agent: validation-auditor
+    prompt: Validate generated files and explain any compliance failures.
+  - agent: pr-writer
+    prompt: Produce PR-ready branch naming, commit message, and PULL_REQUEST.md body.
+  - agent: learning-agent
+    prompt: Update migration memory only when validation or review reveals a concrete miss.
+channel: chat

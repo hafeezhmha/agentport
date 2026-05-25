@@ -1,0 +1,7 @@
+---
+description: Python migration rules
+globs: ["*.py"]
+alwaysApply: false
+---
+
+Use AST parsing for Python source extraction.

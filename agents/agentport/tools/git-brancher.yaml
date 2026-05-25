@@ -1,0 +1,12 @@
+name: git-brancher
+description: "Prepare PR-ready branch names for generated migration output."
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    source_name:
+      type: string
+  required: [source_name]
+annotations:
+  read_only: false
+  requires_confirmation: true

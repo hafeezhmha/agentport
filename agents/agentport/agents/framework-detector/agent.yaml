@@ -1,0 +1,2 @@
+name: framework-detector
+description: "Detects framework markers and records evidence without modifying output files."

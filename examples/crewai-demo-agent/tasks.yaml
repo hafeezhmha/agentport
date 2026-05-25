@@ -1,0 +1,6 @@
+research_task:
+  description: "Collect factual evidence and identify gaps."
+  expected_output: "A concise evidence table with citations and uncertainty."
+analysis_task:
+  description: "Rank choices and explain tradeoffs."
+  expected_output: "A recommendation with risks and assumptions."

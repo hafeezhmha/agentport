@@ -1,0 +1,13 @@
+{
+  "name": "agentport",
+  "version": "0.1.0",
+  "description": "CLI wrapper for AgentPort.",
+  "type": "module",
+  "bin": {
+    "agentport": "./cli/agentport.mjs"
+  },
+  "scripts": {
+    "test": "python -m unittest discover -s tests",
+    "agentport": "python -m agentport.cli.main"
+  }
+}

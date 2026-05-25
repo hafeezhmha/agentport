@@ -1,0 +1,2 @@
+name: pr-writer
+description: "Creates PR-ready branch names, commit messages, and PULL_REQUEST.md content."

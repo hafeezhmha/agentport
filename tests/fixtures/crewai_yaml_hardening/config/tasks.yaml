@@ -1,0 +1,23 @@
+research_task:
+  description: >
+    Review current CrewAI configuration examples and extract identity fields.
+  expected_output: |
+    A markdown table with field names,
+    portability notes, and review risks.
+  agent: researcher
+  tools:
+    - SerperDevTool
+    - FileReadTool
+  context:
+    - previous_task
+  guardrail: >
+    The output must label runtime-only behavior.
+  knowledge_sources:
+    - docs/crewai.md
+
+review_task:
+  description: Validate the migration report.
+  expected_output: A final risk list.
+  agent: reviewer
+  context:
+    - research_task

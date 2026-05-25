@@ -1,0 +1,12 @@
+name: gapman-validator
+description: "Run gapman/gitagent validation when available, otherwise use structural fallback validation."
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    path:
+      type: string
+  required: [path]
+annotations:
+  read_only: true
+  requires_confirmation: false

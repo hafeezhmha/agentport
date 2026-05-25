@@ -1,0 +1,12 @@
+name: repo-scanner
+description: "Scan repository file trees and extract deterministic identity evidence without executing source code."
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    source:
+      type: string
+  required: [source]
+annotations:
+  read_only: true
+  requires_confirmation: false

@@ -1,0 +1,17 @@
+research_task:
+  description: >
+    Research the latest CrewAI agent schema and identify portable identity fields.
+  expected_output: >
+    A sourced list of fields and migration risks.
+  agent: researcher
+  tools:
+    - SerperDevTool
+  guardrail: The answer must distinguish identity fields from runtime behavior.
+analysis_task:
+  description: Write a final recommendation.
+  expected_output: A markdown report.
+  agent: reporting_analyst
+  context:
+    - research_task
+  output_json: ReportSchema
+  async_execution: true

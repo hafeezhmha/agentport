@@ -1,0 +1,12 @@
+name: pr-opener
+description: "Prepare PR body content; opening a real PR requires explicit token and approval."
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    output:
+      type: string
+  required: [output]
+annotations:
+  read_only: false
+  requires_confirmation: true

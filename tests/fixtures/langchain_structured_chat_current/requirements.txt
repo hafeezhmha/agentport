@@ -1,0 +1,2 @@
+langchain==0.2.14
+langchain-core==0.2.35

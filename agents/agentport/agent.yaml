@@ -1,0 +1,68 @@
+spec_version: "0.1.0"
+name: agentport
+version: "0.1.0"
+description: "Multi-agent GitAgent system for porting existing framework agents into GitAgent/Open GAP identity repos."
+model:
+  preferred: "openrouter:openai/gpt-4o-mini"
+  fallback:
+    - "openrouter:openai/gpt-4o"
+  constraints:
+    temperature: 0.2
+skills:
+  - crewai-porting
+  - langgraph-porting
+  - claude-cursor-porting
+  - sod-validation
+  - migration-reporting
+  - registry-readiness
+  - framework-docs-check
+tools:
+  - repo-scanner
+  - gapman-validator
+  - git-brancher
+  - pr-opener
+  - file-writer
+  - framework-docs-search
+agents:
+  framework-detector:
+    path: agents/framework-detector
+    role: detector
+  framework-docs-advisor:
+    path: agents/framework-docs-advisor
+    role: advisor
+  identity-extractor:
+    path: agents/identity-extractor
+    role: extractor
+  tool-schema-extractor:
+    path: agents/tool-schema-extractor
+    role: extractor
+  sod-mapper:
+    path: agents/sod-mapper
+    role: planner
+  schema-writer:
+    path: agents/schema-writer
+    role: maker
+  validation-auditor:
+    path: agents/validation-auditor
+    role: checker
+  pr-writer:
+    path: agents/pr-writer
+    role: publisher
+  learning-agent:
+    path: agents/learning-agent
+    role: learner
+delegation:
+  mode: explicit
+memory:
+  path: memory/MEMORY.md
+knowledge:
+  paths:
+    - knowledge/gitagent-schema.md
+    - knowledge/frameworks/
+    - knowledge/framework-docs/
+compliance:
+  sod_policy: compliance/migration-sod-policy.md
+tags:
+  - gitagent
+  - multi-agent
+  - migration

@@ -1,0 +1,30 @@
+name: framework-docs-search
+description: "Search or verify official framework documentation links when AgentPort needs syntax confirmation."
+version: 1.0.0
+input_schema:
+  type: object
+  properties:
+    framework:
+      type: string
+      description: Framework or SDK name to check.
+    query:
+      type: string
+      description: Syntax, API, or migration-guide question.
+    version_hint:
+      type: string
+      description: Optional dependency version or compatibility profile.
+  required: [framework, query]
+output_schema:
+  type: object
+  properties:
+    summary:
+      type: string
+    links:
+      type: array
+      items:
+        type: string
+annotations:
+  read_only: true
+  requires_confirmation: false
+  cost: network
+  idempotent: true
