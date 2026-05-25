@@ -6,7 +6,7 @@ It does not execute untrusted source repository code. The MVP uses deterministic
 
 ## Lyzr Builder Challenge Fit
 
-AgentPort was built for the Lyzr Builder Challenge as a practical GitAgent workflow product: it turns existing agent projects into GitAgent-ready repositories instead of only demonstrating a toy agent.
+AgentPort was built for the Lyzr Builder Challenge as a practical GitAgent workflow product: it turns existing agent projects into GitAgent-ready repositories instead of only demonstrating a toy agent or a single LLM call.
 
 The core idea is a migration assistant for agent teams. A user points AgentPort at a CrewAI, LangGraph/LangChain, or Claude/Cursor-style repo, and AgentPort analyzes the source, extracts the portable agent identity, maps it into GitAgent schema files, validates the generated output, and prepares review artifacts.
 
@@ -17,7 +17,17 @@ This fits the challenge because it shows:
 - Product thinking around a real adoption problem: helping teams move existing agent work into GitAgent without manually rewriting every agent definition.
 - Python-first implementation with a small JavaScript CLI wrapper, matching the preferred challenge stack.
 - A demo-friendly flow: analyze a sample repo, generate a GitAgent repo, validate it, and show the migration report plus PR-ready output.
-- Optional LLM reviewer support that explains ambiguous mappings and manual fixes while keeping deterministic scanner evidence as the source of truth.
+- Mature LLM usage: the optional LLM reviewer explains ambiguous mappings and manual fixes, but deterministic scanner evidence and validation remain the source of truth.
+
+## Architecture
+
+AgentPort is intentionally evidence-first:
+
+1. **Deterministic scanner** finds framework markers, source files, prompts, rules, tools, runtime hints, and manual-review risks without executing untrusted repo code.
+2. **Compatibility profiler** labels the source shape, such as modern CrewAI YAML, LangGraph v1, LangChain agent factory, Cursor rules, or Claude project memory.
+3. **GitAgent generator** writes the repo-native artifacts: `agent.yaml`, `SOUL.md`, `RULES.md`, `DUTIES.md`, skills, workflows, knowledge, memory, reports, and PR notes.
+4. **Validator** checks the generated GitAgent repo through an external validator when configured, or an internal schema fallback otherwise.
+5. **Optional LLM reviewer** writes `LLM_REVIEW.md` from the structured evidence. It is advisory only and never overrides scanner output, `conversion_map.json`, or validation results.
 
 Suggested demo:
 
