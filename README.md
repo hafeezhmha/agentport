@@ -17,6 +17,7 @@ This fits the challenge because it shows:
 - Product thinking around a real adoption problem: helping teams move existing agent work into GitAgent without manually rewriting every agent definition.
 - Python-first implementation with a small JavaScript CLI wrapper, matching the preferred challenge stack.
 - A demo-friendly flow: analyze a sample repo, generate a GitAgent repo, validate it, and show the migration report plus PR-ready output.
+- Optional LLM reviewer support that explains ambiguous mappings and manual fixes while keeping deterministic scanner evidence as the source of truth.
 
 Suggested demo:
 
@@ -25,7 +26,7 @@ python -m agentport.cli.main analyze --source examples/crewai-demo-agent
 python -m agentport.cli.main port --source examples/crewai-demo-agent --output generated/crewai-demo-gitagent --validate --pr-ready
 ```
 
-The demo should show the input agent repo, the detected framework/profile, generated GitAgent files, validation report, migration report, and `PULL_REQUEST.md`.
+The demo should show the input agent repo, the detected framework/profile, generated GitAgent files, validation report, migration report, and `PULL_REQUEST.md`. To show the optional reviewer layer, run the port command with `--llm-review` and show `LLM_REVIEW.md`.
 
 ## Supported MVP Sources
 
@@ -39,6 +40,7 @@ The demo should show the input agent repo, the detected framework/profile, gener
 cd agentport
 python -m agentport.cli.main analyze --source ../examples/crewai-demo-agent
 python -m agentport.cli.main port --source ../examples/crewai-demo-agent --output ./generated/crewai-demo-gitagent --validate --pr-ready
+python -m agentport.cli.main port --source ../examples/crewai-demo-agent --output ./generated/crewai-demo-gitagent --validate --llm-review
 python -m agentport.cli.main docs check --framework crewai
 python -m agentport.cli.main docs check --source ../examples/crewai-demo-agent
 ```
@@ -74,7 +76,25 @@ When no override or external `gapman`/`gitagent` binary is available, AgentPort 
 - `validation_report.json`
 - `framework_compatibility_report.md`
 - `registry_readiness_report.md`
+- `LLM_REVIEW.md` when `--llm-review` is used
 - `PULL_REQUEST.md` when `--pr-ready` is used
+
+## Optional LLM Review
+
+`--llm-review` writes `LLM_REVIEW.md` after deterministic generation and validation. The reviewer is advisory only: AgentPort still treats scanner output, `conversion_map.json`, and validation results as the source of truth.
+
+Without credentials, AgentPort writes a skipped/setup report instead of failing the port. To call an OpenAI-compatible chat endpoint:
+
+```bash
+export AGENTPORT_LLM_API_KEY=...
+export AGENTPORT_LLM_MODEL=gpt-4.1-mini
+# Optional; defaults to OpenAI-compatible chat completions.
+export AGENTPORT_LLM_BASE_URL=https://api.openai.com/v1/chat/completions
+
+python -m agentport.cli.main port --source examples/crewai-demo-agent --output generated/crewai-demo-gitagent --validate --llm-review
+```
+
+The LLM reviewer receives only structured deterministic evidence and is prompted not to claim runtime equivalence.
 
 ## Boundary
 

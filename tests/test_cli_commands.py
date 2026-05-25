@@ -165,6 +165,34 @@ class CliCommandTests(unittest.TestCase):
             self.assertTrue((out / "conversion_map.json").exists())
             self.assertTrue((out / "TODO_MANUAL_REVIEW.md").exists())
 
+    def test_port_llm_review_without_api_key_writes_skipped_report(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "ported"
+            stdout = io.StringIO()
+            with patch.dict("os.environ", {}, clear=True):
+                with contextlib.redirect_stdout(stdout):
+                    code = main(
+                        [
+                            "port",
+                            "--source",
+                            str(FIXTURES / "crewai_schema_current"),
+                            "--output",
+                            str(out),
+                            "--validate",
+                            "--llm-review",
+                            "--json",
+                            "--no-learn",
+                        ]
+                    )
+
+            self.assertEqual(code, 0)
+            payload = json.loads(stdout.getvalue())
+            self.assertEqual(payload["llm_review"]["status"], "skipped")
+            self.assertIn("LLM_REVIEW.md", payload["generated_files"])
+            review = (out / "LLM_REVIEW.md").read_text(encoding="utf-8")
+            self.assertIn("Status: skipped", review)
+            self.assertIn("source of truth", review)
+
     def test_port_validator_command_flag_is_used(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp) / "out"

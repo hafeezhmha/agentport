@@ -91,8 +91,17 @@ class ValidationResult:
 
 
 @dataclass
+class LLMReviewResult:
+    status: str
+    model: str
+    report_path: str
+    error: str | None = None
+
+
+@dataclass
 class PortResult:
     output_path: Path
     generated_files: list[str]
     detection: FrameworkDetection
     validation: ValidationResult | None = None
+    llm_review: LLMReviewResult | None = None

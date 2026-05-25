@@ -40,6 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
     port_cmd.add_argument("--validate", action="store_true", help="Run external validation if available, otherwise internal schema validation.")
     port_cmd.add_argument("--validator-command", help="Validation command override. Use {path} for the generated repo path; otherwise the path is appended.")
     port_cmd.add_argument("--pr-ready", action="store_true", help="Write PULL_REQUEST.md and validation/readiness reports.")
+    port_cmd.add_argument("--llm-review", action="store_true", help="Write optional LLM_REVIEW.md advisory notes. Requires AGENTPORT_LLM_API_KEY to call a provider.")
     port_cmd.add_argument("--strict", action="store_true", help="Return exit code 3 and skip generation when detection/profile confidence is low or generic.")
     port_cmd.add_argument("--allow-partial", action="store_true", default=True, help="Allow identity-layer ports with manual-review items. This is currently the default.")
     port_cmd.add_argument("--no-learn", action="store_true", help="Disable AgentPort memory updates from validation warnings/failures.")
@@ -149,12 +150,14 @@ def main(argv: list[str] | None = None) -> int:
                 learn=not args.no_learn,
                 agentport_root=root,
                 validator_command=args.validator_command,
+                llm_review=args.llm_review,
             )
             payload = {
                 "output_path": str(result.output_path),
                 "framework": result.detection.__dict__,
                 "generated_files": result.generated_files,
                 "validation": result.validation.__dict__ if result.validation else None,
+                "llm_review": result.llm_review.__dict__ if result.llm_review else None,
             }
             if args.json:
                 print(json.dumps(payload, indent=2))
@@ -163,6 +166,8 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"Framework: {result.detection.framework} ({result.detection.confidence:.2f})")
                 if result.validation:
                     print(f"Validation: {result.validation.mode} {'passed' if result.validation.ok else 'failed'}")
+                if result.llm_review:
+                    print(f"LLM review: {result.llm_review.status} ({result.llm_review.report_path})")
                 print(f"Generated files: {len(result.generated_files)}")
             if result.validation and not result.validation.ok:
                 return EXIT_VALIDATION_FAILED

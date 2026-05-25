@@ -11,6 +11,7 @@ from agentport.core.generation.gitagent_writer import write_gitagent_repo
 from agentport.core.generation.report_writer import write_reports
 from agentport.core.gitops.clone import resolve_source
 from agentport.core.learning.memory_updater import update_memory
+from agentport.core.llm.reviewer import write_llm_review
 from agentport.core.mapping.generic_mapper import make_port_plan
 from agentport.core.scanner.file_tree import scan_files
 from agentport.core.scanner.compatibility_profiler import profile_compatibility
@@ -162,6 +163,7 @@ def port(
     learn: bool = True,
     agentport_root: Path | None = None,
     validator_command: str | None = None,
+    llm_review: bool = False,
 ) -> PortResult:
     source_path, tmp = resolve_source(source)
     try:
@@ -185,7 +187,12 @@ def port(
             if updated is not None:
                 generated.append(str(updated.relative_to(agentport_root)))
 
-        return PortResult(output_path=output_path, generated_files=generated, detection=detection, validation=validation)
+        review = None
+        if llm_review:
+            review = write_llm_review(plan, validation)
+            generated.append(review.report_path)
+
+        return PortResult(output_path=output_path, generated_files=generated, detection=detection, validation=validation, llm_review=review)
     finally:
         if tmp is not None:
             tmp.cleanup()
