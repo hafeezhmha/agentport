@@ -4,6 +4,29 @@ AgentPort is a CLI-first multi-agent GitAgent porting system. It ports the porta
 
 It does not execute untrusted source repository code. The MVP uses deterministic scanners before any LLM or agent reasoning.
 
+## Lyzr Builder Challenge Fit
+
+AgentPort was built for the Lyzr Builder Challenge as a practical GitAgent workflow product: it turns existing agent projects into GitAgent-ready repositories instead of only demonstrating a toy agent.
+
+The core idea is a migration assistant for agent teams. A user points AgentPort at a CrewAI, LangGraph/LangChain, or Claude/Cursor-style repo, and AgentPort analyzes the source, extracts the portable agent identity, maps it into GitAgent schema files, validates the generated output, and prepares review artifacts.
+
+This fits the challenge because it shows:
+
+- GitAgent-native agent design through `agents/`, `skills/`, `tools/`, `workflows/`, `knowledge/`, and `memory/`.
+- Multi-agent workflow thinking, with separate responsibilities for framework detection, identity extraction, schema writing, validation, documentation evidence, PR writing, and learning.
+- Product thinking around a real adoption problem: helping teams move existing agent work into GitAgent without manually rewriting every agent definition.
+- Python-first implementation with a small JavaScript CLI wrapper, matching the preferred challenge stack.
+- A demo-friendly flow: analyze a sample repo, generate a GitAgent repo, validate it, and show the migration report plus PR-ready output.
+
+Suggested demo:
+
+```bash
+python -m agentport.cli.main analyze --source examples/crewai-demo-agent
+python -m agentport.cli.main port --source examples/crewai-demo-agent --output generated/crewai-demo-gitagent --validate --pr-ready
+```
+
+The demo should show the input agent repo, the detected framework/profile, generated GitAgent files, validation report, migration report, and `PULL_REQUEST.md`.
+
 ## Supported MVP Sources
 
 - CrewAI-style Python repos
